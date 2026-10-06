@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security Lab</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #070a0f;
+    --panel: #0e141c;
+    --panel2: #0a0f15;
+    --border: #202b38;
+    --text: #e8eef5;
+    --muted: #7d8b9b;
+    --green: #35e69a;
+    --red: #ff5969;
+    --yellow: #f5c451;
+    --blue: #58a6ff;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at 15% 10%, #102438 0, transparent 30%),
+        radial-gradient(circle at 85% 90%, #142016 0, transparent 25%),
+        var(--bg);
+    color: var(--text);
+    font-family: Inter, system-ui, Arial, sans-serif;
+}
+
+.container {
+    width: min(1100px, 100%);
+    margin: auto;
+    padding: 35px 20px;
+}
+
+/* HEADER */
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    font-size: 22px;
+}
+
+h1 {
+    margin: 0;
+    font-size: 21px;
+    letter-spacing: .04em;
+}
+
+.subtitle {
+    margin-top: 3px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.badge {
+    padding: 7px 11px;
+    border: 1px solid #285b49;
+    border-radius: 50px;
+    background: #0a1914;
+    color: var(--green);
+    font-size: 11px;
+}
+
+/* GRID */
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.card {
+    padding: 23px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: linear-gradient(180deg, #111821, #0d131a);
+    box-shadow: 0 20px 50px #0006;
+}
+
+/* LOGIN */
+
+.login-card {
+    min-height: 500px;
+    display: grid;
+    place-items: center;
+}
+
+form {
+    width: min(100%, 360px);
+}
+
+h2 {
+    margin: 0 0 20px;
+    font-size: 13px;
+    letter-spacing: .09em;
+}
+
+label {
+    display: block;
+    margin: 14px 0 7px;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+input {
+    width: 100%;
+    padding: 12px 13px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    outline: none;
+    background: #080c11;
+    color: var(--text);
+}
+
+input:focus {
+    border-color: #456886;
+    box-shadow: 0 0 0 3px #3b7bb522;
+}
+
+button {
+    width: 100%;
+    margin-top: 18px;
+    padding: 12px;
+    border: 0;
+    border-radius: 9px;
+    background: var(--green);
+    color: #06130d;
+    font-weight: 800;
+    cursor: pointer;
+    transition: .2s;
+}
+
+button:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+/* PASSWORD */
+
+.meter {
+    height: 6px;
+    margin-top: 10px;
+    overflow: hidden;
+    border-radius: 20px;
+    background: #202833;
+}
+
+.meter span {
+    display: block;
+    width: 0;
+    height: 100%;
+    background: var(--red);
+    transition: .25s;
+}
+
+.strength {
+    margin-top: 7px;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+/* STATS */
+
+.stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.stat {
+    padding: 13px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--panel2);
+}
+
+.stat small {
+    display: block;
+    color: var(--muted);
+    font-size: 9px;
+    letter-spacing: .06em;
+}
+
+.stat strong {
+    display: block;
+    margin-top: 5px;
+    font-size: 18px;
+}
+
+/* STATUS */
+
+.status {
+    margin-top: 15px;
+    padding: 13px;
+    border: 1px solid #245640;
+    border-radius: 10px;
+    background: #0a1914;
+    color: var(--green);
+    font-size: 12px;
+}
+
+.status.warning {
+    border-color: #64501e;
+    background: #191607;
+    color: var(--yellow);
+}
+
+.status.danger {
+    border-color: #602a32;
+    background: #1b0c10;
+    color: var(--red);
+}
+
+/* LOGS */
+
+.logs {
+    height: 250px;
+    overflow-y: auto;
+    padding: 11px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #080c11;
+    font-family: Consolas, monospace;
+    font-size: 11px;
+}
+
+.log {
+    padding: 6px 0;
+    border-bottom: 1px solid #151c24;
+}
+
+.time {
+    color: #536273;
+}
+
+/* INFO */
+
+.info {
+    margin-top: 15px;
+    color: #687788;
+    font-size: 10px;
+    line-height: 1.6;
+}
+
+.demo {
+    color: var(--blue);
+}
+
+/* FOOTER */
+
+footer {
+    margin-top: 22px;
+    text-align: center;
+    color: #4d5966;
+    font-size: 10px;
+}
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    header {
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .badge {
+        font-size: 9px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+
+    <div class="brand">
+
+        <div class="logo">
+            ⌁
+        </div>
+
+        <div>
+            <h1>SECURITY LAB</h1>
+
+            <div class="subtitle">
+                Fake Login & Security Simulation
+            </div>
+        </div>
+
+    </div>
+
+    <div class="badge">
+        ● LOCAL SIMULATION
+    </div>
+
+</header>
+
+
+<div class="grid">
+
+<!-- LOGIN PANEL -->
+
+<section class="card login-card">
+
+<form id="loginForm" autocomplete="off">
+
+    <h2>AUTHENTICATION</h2>
+
+    <label for="username">
+        USERNAME
+    </label>
+
+    <input
+        id="username"
+        type="text"
+        placeholder="admin"
+        maxlength="32"
+    >
+
+    <label for="password">
+        PASSWORD
+    </label>
+
+    <input
+        id="password"
+        type="password"
+        placeholder="Enter test password"
+        maxlength="64"
+    >
+
+    <div class="meter">
+        <span id="meter"></span>
+    </div>
+
+    <div
+        class="strength"
+        id="strength"
+    >
+        Password strength: —
+    </div>
+
+    <button type="submit">
+        AUTHENTICATE
+    </button>
+
+    <div class="info">
+
+        Educational security simulation.
+
+        <br><br>
+
+        <span class="demo">
+            Demo credentials:
+            admin / Admin123!
+        </span>
+
+        <br><br>
+
+        No credentials are sent anywhere.
+        Everything runs locally in your browser.
+
+    </div>
+
+</form>
+
+</section>
+
+
+<!-- SECURITY MONITOR -->
+
+<section class="card">
+
+    <h2>
+        SECURITY MONITOR
+    </h2>
+
+
+    <div class="stats">
+
+        <div class="stat">
+
+            <small>
+                ATTEMPTS
+            </small>
+
+            <strong id="attempts">
+                0
+            </strong>
+
+        </div>
+
+
+        <div class="stat">
+
+            <small>
+                SUCCESSFUL
+            </small>
+
+            <strong id="successful">
+                0
+            </strong>
+
+        </div>
+
+
+        <div class="stat">
+
+            <small>
+                RATE LIMIT
+            </small>
+
+            <strong id="rateLimit">
+                READY
+            </strong>
+
+        </div>
+
+
+        <div class="stat">
+
+            <small>
+                SESSION
+            </small>
+
+            <strong id="session">
+                NONE
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <div
+        id="status"
+        class="status"
+    >
+        System ready. Try the demo login.
+    </div>
+
+
+    <h2 style="margin-top:22px;">
+        EVENT LOG
+    </h2>
+
+
+    <div
+        class="logs"
+        id="logs"
+    ></div>
+
+</section>
+
+</div>
+
+
+<footer>
+    Security Lab v1.0 · Defensive Web Security Education
+</footer>
+
+</div>
+
+
+<script>
+
+const form = document.getElementById("loginForm");
+
+const username = document.getElementById("username");
+
+const password = document.getElementById("password");
+
+const meter = document.getElementById("meter");
+
+const strengthText = document.getElementById("strength");
+
+const attemptsElement = document.getElementById("attempts");
+
+const successfulElement =
+    document.getElementById("successful");
+
+const rateLimitElement =
+    document.getElementById("rateLimit");
+
+const sessionElement =
+    document.getElementById("session");
+
+const statusElement =
+    document.getElementById("status");
+
+const logs =
+    document.getElementById("logs");
+
+
+let attempts = 0;
+
+let successful = 0;
+
+let lockedUntil = 0;
+
+
+/*
+    PASSWORD STRENGTH
+*/
+
+function calculateStrength(value) {
+
+    let score = 0;
+
+    if (value.length >= 8)
+        score++;
+
+    if (value.length >= 12)
+        score++;
+
+    if (/[a-z]/.test(value))
+        score++;
+
+    if (/[A-Z]/.test(value))
+        score++;
+
+    if (/[0-9]/.test(value))
+        score++;
+
+    if (/[^A-Za-z0-9]/.test(value))
+        score++;
+
+    return Math.min(score, 6);
+}
+
+
+password.addEventListener("input", () => {
+
+    const score =
+        calculateStrength(password.value);
+
+    const percentage =
+        (score / 6) * 100;
+
+    meter.style.width =
+        percentage + "%";
+
+
+    if (score <= 2) {
+
+        meter.style.background =
+            "var(--red)";
+
+    } else if (score <= 4) {
+
+        meter.style.background =
+            "var(--yellow)";
+
+    } else {
+
+        meter.style.background =
+            "var(--green)";
+    }
+
+
+    const names = [
+        "—",
+        "VERY WEAK",
+        "WEAK",
+        "WEAK",
+        "FAIR",
+        "GOOD",
+        "VERY STRONG"
+    ];
+
+
+    strengthText.textContent =
+        "Password strength: " +
+        names[score];
+
+});
+
+
+/*
+    TIME
+*/
+
+function getTime() {
+
+    return new Date()
+        .toLocaleTimeString([], {
+            hour12: false
+        });
+
+}
+
+
+/*
+    EVENT LOG
+*/
+
+function addLog(message, color) {
+
+    const entry =
+        document.createElement("div");
+
+    entry.className = "log";
+
+    entry.innerHTML = `
+        <span class="time">
+            [${getTime()}]
+        </span>
+        ${message}
+    `;
+
+    if (color)
+        entry.style.color = color;
+
+    logs.prepend(entry);
+
+}
+
+
+/*
+    UPDATE STATS
+*/
+
+function updateStats() {
+
+    attemptsElement.textContent =
+        attempts;
+
+    successfulElement.textContent =
+        successful;
+
+}
+
+
+/*
+    LOGIN
+*/
+
+form.addEventListener("submit", event => {
+
+    event.preventDefault();
+
+
+    /*
+        RATE LIMIT CHECK
+    */
+
+    const remaining =
+        lockedUntil - Date.now();
+
+
+    if (remaining > 0) {
+
+        statusElement.className =
+            "status danger";
+
+        statusElement.textContent =
+            "Rate limit active — wait " +
+            Math.ceil(remaining / 1000) +
+            " seconds.";
+
+        addLog(
+            "Login blocked by rate limiter.",
+            "var(--red)"
+        );
+
+        return;
+    }
+
+
+    attempts++;
+
+    updateStats();
+
+
+    /*
+        DEMO LOGIN
+    */
+
+    if (
+        username.value === "admin" &&
+        password.value === "Admin123!"
+    ) {
+
+        successful++;
+
+        updateStats();
+
+        sessionElement.textContent =
+            "ACTIVE";
+
+        statusElement.className =
+            "status";
+
+        statusElement.textContent =
+            "Demo authentication successful.";
+
+        addLog(
+            "Successful demo authentication.",
+            "var(--green)"
+        );
+
+        return;
+    }
+
+
+    /*
+        FAILED LOGIN
+    */
+
+    statusElement.className =
+        "status warning";
+
+    statusElement.textContent =
+        "Authentication failed. Demo credentials rejected.";
+
+
+    addLog(
+        "Failed login for " +
+        `"${username.value || "empty-user"}".`,
+        "var(--red)"
+    );
+
+
+    /*
+        RATE LIMIT AFTER 3 ATTEMPTS
+    */
+
+    if (attempts % 3 === 0) {
+
+        lockedUntil =
+            Date.now() + 8000;
+
+        rateLimitElement.textContent =
+            "ACTIVE";
+
+
+        statusElement.className =
+            "status danger";
+
+        statusElement.textContent =
+            "Too many attempts — rate limit activated for 8 seconds.";
+
+
+        addLog(
+            "Rate limiter triggered — 8 second cooldown.",
+            "var(--yellow)"
+        );
+
+
+        setTimeout(() => {
+
+            rateLimitElement.textContent =
+                "READY";
+
+            statusElement.className =
+                "status";
+
+            statusElement.textContent =
+                "Rate limit cleared. System ready.";
+
+            addLog(
+                "Rate limiter cleared.",
+                "var(--green)"
+            );
+
+        }, 8000);
+
+    }
+
+});
+
+
+/*
+    INITIAL LOGS
+*/
+
+addLog(
+    "Security Lab initialized.",
+    "var(--green)"
+);
+
+addLog(
+    "Local simulation started.",
+    "var(--blue)"
+);
+
+addLog(
+    "No network requests are used.",
+    "var(--blue)"
+);
+
+</script>
+
+</body>
+</html>
